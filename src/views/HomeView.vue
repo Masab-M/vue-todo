@@ -1,7 +1,7 @@
-<script setup>
-</script>
+<script setup></script>
 
 <template>
-<div>
-</div>
+  <div>
+  <router-link to="/login">Login</router-link>
+  </div>
 </template>
