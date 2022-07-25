@@ -8,10 +8,13 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "ag-grid-community": "^28.0.2",
+    "ag-grid-vue3": "^28.0.0",
     "uuid": "^8.3.2",
     "vue": "^3.2.37",
     "vue-axios": "^3.4.1",
     "vue-router": "^4.1.2",
+    "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

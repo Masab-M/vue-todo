@@ -4,10 +4,10 @@
             <form action="">
                 <div class="form-group">
                     <input type="text" v-model="todoinput" placeholder="Enter New In List" name="newlist" id="newlist">
-                    <select name=""  v-model="todoStatus" id="">
-                    <option value="open">Open</option>
-                    <option value="inprogress">In Progress</option>
-                    <option value="close">Close</option>
+                    <select name="" v-model="todoStatus" id="">
+                        <option value="open">Open</option>
+                        <option value="inprogress">In Progress</option>
+                        <option value="close">Close</option>
                     </select>
                 </div>
                 <div class="submit-btn">
@@ -15,8 +15,23 @@
                 </div>
             </form>
             <div class="listview">
-                <div v-for="(todo) in $store.state.todos" :key="todo.id">
-                <SingleList :todolist=todo />
+                <table>
+                    <thead>
+                        <th>id</th>
+                        <th>Title</th>
+                        <th>Actions</th>
+                    </thead>
+                    <tbody>
+                        <SingleList v-for="(todo, index) in $store.state.todos.slice((($store.state.page-1)*$store.state.limit),$store.state.limit*$store.state.page)" :key="todo.id" :index="index"
+                            :todolist=todo />
+                    </tbody>
+                </table>
+                <div class="paginatios">
+                <button v-if="($store.state.page>1)" @click="prepage()">Previous</button>
+                <ul>
+                <li v-for="page in $store.state.pages" @click="jumppage(page)">{{page}}</li>
+                </ul>
+                <button v-if="($store.state.page<$store.state.pages)" @click="nextpage()">Next</button>
                 </div>
             </div>
         </div>
@@ -26,10 +41,15 @@
 <script>
 import SingleList from './SingleList.vue';
 import store from '../store/index'
-import {v1} from 'uuid'
+import { v1 } from 'uuid'
+import { mapActions } from 'vuex';
 export default {
-
+    data() {
+        return {
+        }
+    },
     methods: {
+        ...mapActions(['jumppage','nextpage','prepage']),
         addnew: function addtodos(event) {
             event.preventDefault();
             if (this.todoinput != "") {
@@ -41,13 +61,14 @@ export default {
                 store.commit("add_todos", todo);
                 this.todoinput = "";
             }
-        },
-       
+        }
+
     },
     setup() {
-        return {};
+        return {
+        };
     },
-    components: {  SingleList }
+    components: { SingleList }
 }
 </script>
 

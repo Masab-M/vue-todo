@@ -1,12 +1,20 @@
 <template>
-    <div>
-                <span v-if="!editing">
-                    {{ todolist.name }}
-                </span>
-                <input @change="updatedText" v-bind:value="todotext" v-else type="text" name="" id="">
-                <button @click="edittodo(todolist)" >{{editing?'updating':'Edit'}}</button>
-                <button @click="deletetodo(todolist.id)">Delete</button>
-    </div>
+    <tr>
+    <td>
+    {{index+1}}
+    </td>
+        <td v-if="!editing">
+            {{ todolist.name }}
+        </td>
+        <td v-else>
+            <input @change="updatedText" v-bind:value="todotext" type="text" name="" id="" />
+        </td>
+        <td>
+            <button @click="edittodo(todolist)">{{ editing ? 'updating' : 'Edit' }}</button>
+            <button @click="deletetodo(todolist.id)">Delete</button>
+        </td>
+
+    </tr>
 </template>
 
 <script>
@@ -17,29 +25,28 @@ export default {
             editing: false
         };
     },
-    props:['todolist'],
+    props: ['todolist','index'],
     methods: {
-         ...mapActions(["deletetodo","updatetodo"]),
+        ...mapActions(["deletetodo", "updatetodo"]),
         edittodo(todo) {
             this.editing = this.editing == true ? false : true;
             if (this.editing) {
                 this.todotext = todo.name;
                 this.updatetodo(todo)
             }
-            else{
-                todo.name=this.todotext
+            else {
+                todo.name = this.todotext
             }
         },
         updatedText(e) {
             this.todotext = e.target.value;
         }
     },
-    setup () {
+    setup() {
         return {}
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
