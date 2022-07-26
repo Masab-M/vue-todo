@@ -23,7 +23,8 @@ export default {
       event.preventDefault()
       const username=this.username
       const password=this.password
-      axios.post('/auth/login',{username:username,password:password}).then((result)=>{
+      const url=""
+      axios.post(url+'/auth/login',{username:username,password:password}).then((result)=>{
         localStorage.setItem('access_token',result.data.access_token)
       }).catch((err)=>{
         console.warn(err);

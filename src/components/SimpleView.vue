@@ -49,14 +49,17 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['jumppage','nextpage','prepage']),
-        addnew: function addtodos(event) {
+        ...mapActions(['jumppage','nextpage','prepage','getNow']),
+        addnew: async function addtodos(event) {
             event.preventDefault();
             if (this.todoinput != "") {
                 const todo = {
                     id: v1(),
                     name: this.todoinput,
-                    status: this.todoStatus
+                    status: this.todoStatus,
+                    created_at:await this.getNow(),
+                    last_updated_at:await this.getNow()
+
                 };
                 store.commit("add_todos", todo);
                 this.todoinput = "";

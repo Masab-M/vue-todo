@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-3">
             <h3>Open</h3>
-            <draggable class="list-group kanban-column" :list="arrOpen" group="people" @change="log" itemKey="name">
+            <draggable class="list-group kanban-column" :list="arrOpen" group="people" @change="logOpen" itemKey="name">
                 <template #item="{ element, index }">
                     <div class="list-group-item">{{ element.name }} {{ index }}</div>
                 </template>
@@ -11,7 +11,7 @@
 
         <div class="col-3">
             <h3>In Progress</h3>
-            <draggable class="list-group kanban-column" :list="arrInProgress" group="people" @change="log" itemKey="name">
+            <draggable class="list-group kanban-column" :list="arrInProgress" group="people" @change="logInprogress" itemKey="name">
                 <template #item="{ element, index }">
                     <div class="list-group-item">{{ element.name }} {{ index }}</div>
                 </template>
@@ -19,12 +19,17 @@
         </div>
         <div class="col-3">
             <h3>Close</h3>
-            <draggable class="list-group kanban-column" :list="arrClose" group="people" @change="log" itemKey="name">
+            <draggable class="list-group kanban-column" :list="arrClose" group="people" @change="logClose" itemKey="name">
                 <template #item="{ element, index }">
-                    <div class="list-group-item">{{ element.name }} {{ index }}</div>
+                    <div class="list-group-item" :key="index">{{ element.name }} {{ index }}</div>
                 </template>
             </draggable>
         </div>
+        <!-- {{arrOpen}}
+        <br>
+        {{arrInProgress}}
+        <br>
+        {{arrClose}} -->
     </div>
 </template>
 <script>
@@ -32,6 +37,7 @@
 import store from '../store/index'
 
 import draggable from 'vuedraggable';
+import { mapActions } from 'vuex';
 export default {
     name: "kanban-board",
     display: "Two Lists",
@@ -68,6 +74,7 @@ export default {
         };
     },
     methods: {
+        ...mapActions(["updateTodo","getNow"]),
         add: function () {
             this.list.push({ name: "Juan" });
         },
@@ -79,8 +86,42 @@ export default {
                 name: el.name + " cloned"
             };
         },
-        log: function (evt) {
-            window.console.log(evt);
+        logOpen: async function (evt) {
+            if(evt.removed)
+            {
+                console.log('remove Open');
+            }
+            else{
+                 const todo=JSON.parse(JSON.stringify(evt.added.element));
+                todo.status="open"
+                todo.last_updated_at=await this.getNow()
+                this.updateTodo(todo)
+            }
+        },
+        logInprogress: async function (evt) {
+            if(evt.removed)
+            {
+                console.log('remove Progress');
+            }
+            else{
+                const todo=JSON.parse(JSON.stringify(evt.added.element));
+                todo.status="inprogress"
+                todo.last_updated_at=await this.getNow()
+                this.updateTodo(todo)
+            }
+        },
+        logClose:async function (evt) {
+                      if(evt.removed)
+            {
+                console.log('remove Close');
+            }
+            else{
+                  const todo=JSON.parse(JSON.stringify(evt.added.element));
+                todo.last_updated_at=await this.getNow()
+                todo.status="close"
+                this.updateTodo(todo)
+                
+            }
         }
     },
     setup() {

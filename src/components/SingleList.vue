@@ -27,8 +27,8 @@ export default {
     },
     props: ['todolist','index'],
     methods: {
-        ...mapActions(["deletetodo", "updatetodo"]),
-        edittodo(todo) {
+        ...mapActions(["deletetodo", "updateTodo","getNow"]),
+        async edittodo(todo) {
             this.editing = this.editing == true ? false : true;
             if (this.editing) {
                 this.todotext = todo.name;
@@ -36,6 +36,7 @@ export default {
             }
             else {
                 todo.name = this.todotext
+                todo.last_updated_at=await this.getNow()
             }
         },
         updatedText(e) {
