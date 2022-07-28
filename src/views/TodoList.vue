@@ -9,10 +9,19 @@
 </template>
 
 <script>
+import router from '../router';
+
 export default {
     setup () {
         return {}
-    }
+    },
+    beforeMount(){
+        const token=localStorage.getItem('access_token');
+        if(!token)
+        {
+            router.push('/login')
+        }
+ },
 }
 </script>
 

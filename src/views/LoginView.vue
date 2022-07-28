@@ -17,6 +17,7 @@
 
 <script>
 import axios from 'axios'
+import router from '../router'
 export default {
   methods: {
     submit:async function getlogged(event){
@@ -26,6 +27,7 @@ export default {
       const url=""
       axios.post(url+'/auth/login',{username:username,password:password}).then((result)=>{
         localStorage.setItem('access_token',result.data.access_token)
+        router.push('/list')
       }).catch((err)=>{
         console.warn(err);
       })
